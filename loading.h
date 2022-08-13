@@ -71,15 +71,16 @@ void circunference(int radius, CHAR_INFO consoleBuffer[]){//Draws a circle
 	}
 }
 
-/*void gameOver_txt(CHAR_INFO consoleBuffer[]){
+void gameOver_txt(CHAR_INFO consoleBuffer[]){
+	setbcolor(0,consoleBuffer);
     line(0,0,canvas.WIDTH,0,BACKGROUND_WHITE,consoleBuffer);
 	line(0,canvas.HEIGHT-1,canvas.WIDTH,canvas.HEIGHT-1,BACKGROUND_WHITE,consoleBuffer);
 	line(0,0,0,canvas.HEIGHT-1,BACKGROUND_WHITE,consoleBuffer);
 	line(canvas.WIDTH-1,0,canvas.WIDTH-1,canvas.HEIGHT-1,BACKGROUND_WHITE,consoleBuffer);
     int letterSize = 3;//3x3
-	int letterQuant = 9;//L=1 O=2 ...
-	int miniCanvasW[2] = {CX - 8, CX + 8};//3 letter + blank row for each letter+ middle blank row (6 + 1 + 6 = 13) 
-	int miniCanvasH[2] = {(CY + RAD + 1)+1, (CY + RAD + 2 + letterSize*2)};
+	int letterQuant = 7;//L=1 O=2 ...
+	int miniCanvasW[2] = {CX - 18, CX + 17};//3 letter + blank row for each letter+ middle blank row (6 + 1 + 6 = 13) 
+	int miniCanvasH[2] = {(CY + RAD + 1)+1, (CY + RAD + 1 + letterSize)};
 	int i = 0;
 	for (int width_step = miniCanvasW[0]; width_step <= miniCanvasW[1]; width_step++){
 		i++;
@@ -103,15 +104,20 @@ void circunference(int radius, CHAR_INFO consoleBuffer[]){//Draws a circle
 	miniCanvasW[0]+=letterSize+1;
     //E
     pixel(miniCanvasW[0]+2, miniCanvasH[0]+1, 0,consoleBuffer);
-	miniCanvasW[0] =miniCanvasW[1] - 16;
+	miniCanvasW[0]+=letterSize+1;
+	//blank
+	line(miniCanvasW[0],miniCanvasH[0],miniCanvasW[0]+2,miniCanvasH[0],0,consoleBuffer);
+	line(miniCanvasW[0],miniCanvasH[0]+1,miniCanvasW[0]+2,miniCanvasH[0]+1,0,consoleBuffer);
+	line(miniCanvasW[0],miniCanvasH[0]+2,miniCanvasW[0]+2,miniCanvasH[0]+2,0,consoleBuffer);
+	miniCanvasW[0]+=letterSize+1;
     //O
-	pixel(miniCanvasW[0]+1, miniCanvasH[1]+1, 0,consoleBuffer);
+	pixel(miniCanvasW[0]+1, miniCanvasH[0]+1, 0,consoleBuffer);
 	miniCanvasW[0]+=letterSize+1;
     //V
-    pixel(miniCanvasW[0] + 1,miniCanvasH[1],0,consoleBuffer);
-	pixel(miniCanvasW[0] + 2,miniCanvasH[1]+2,0,consoleBuffer);
-	pixel(miniCanvasW[0] + 1,miniCanvasH[1]+1,0,consoleBuffer);
-	pixel(miniCanvasW[0],miniCanvasH[1]+2,0,consoleBuffer);
+    pixel(miniCanvasW[0] + 1,miniCanvasH[0],0,consoleBuffer);
+	pixel(miniCanvasW[0] + 2,miniCanvasH[0]+2,0,consoleBuffer);
+	pixel(miniCanvasW[0] + 1,miniCanvasH[0]+1,0,consoleBuffer);
+	pixel(miniCanvasW[0],miniCanvasH[0]+2,0,consoleBuffer);
 	miniCanvasW[0]+=letterSize+1;
     //E
     pixel(miniCanvasW[0]+2, miniCanvasH[0]+1, 0,consoleBuffer);
@@ -122,7 +128,8 @@ void circunference(int radius, CHAR_INFO consoleBuffer[]){//Draws a circle
 	pixel(miniCanvasW[0] + 1,miniCanvasH[0]+2,0,consoleBuffer);
 	pixel(miniCanvasW[0] + 2,miniCanvasH[0]+2,0,consoleBuffer);
 	miniCanvasW[0]+=letterSize+1;
-}*/
+	
+}
 
 void loading_txt(CHAR_INFO consoleBuffer[]){//LOADING text
 	//OUTLINES

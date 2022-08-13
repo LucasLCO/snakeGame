@@ -2,7 +2,7 @@
 #include <windows.h>
 #include "loading.h"
 
-#define WIDTH 80
+#define WIDTH 100
 #define HEIGHT 30
 
 #define idx(c, r) (c + WIDTH * r)
@@ -16,6 +16,10 @@ struct snake{
     int foody;
 }snk;
 
+void gameover(CHAR_INFO consoleBuffer[]){
+    gameOver_txt(consoleBuffer);
+}
+
 void init_snake(struct snake *snake){
     snake ->headx =WIDTH/2;
     snake ->heady =HEIGHT/2;
@@ -25,21 +29,21 @@ void gen_food(struct snake *snake){
     snake ->foodx = rand() % WIDTH;
     snake ->foody = rand() % HEIGHT;
 }
-void snake(CHAR_INFO consoleBuffer[]){
+int snake(CHAR_INFO consoleBuffer[]){
     int gameover = 1;
     if (snk.size == 0){
         gen_food(&snk);
-        snk.size+=2;
+        snk.size+=10;
     }
-    if(GetAsyncKeyState(VK_UP)) {
-				snk.direction = 0;
-			} else if(GetAsyncKeyState(VK_DOWN)) {
-				snk.direction = 1;
-			} else if(GetAsyncKeyState(VK_LEFT)) {
-				snk.direction = 2;
-			} else if(GetAsyncKeyState(VK_RIGHT)) {
-				snk.direction = 3;
-			}
+    if(GetAsyncKeyState(VK_UP)) 
+		snk.direction = 0;
+	else if(GetAsyncKeyState(VK_DOWN)) 
+		snk.direction = 1;
+	else if(GetAsyncKeyState(VK_LEFT))
+		snk.direction = 2;
+	else if(GetAsyncKeyState(VK_RIGHT))
+		snk.direction = 3;
+
     int direc = snk.direction;
         snk.body[0] = idx(snk.headx,snk.heady);
     for(int i = snk.size-1; i > 0; i--){
@@ -82,30 +86,26 @@ void snake(CHAR_INFO consoleBuffer[]){
     //Game Over colisions
     for(int cont = snk.size-1;cont>=0;cont--){
         if(idx(snk.headx,snk.heady) == snk.body[cont])
-            gameover = 0;
+            gameover=0;
     }
 
     if(snk.headx > WIDTH || snk.headx < 0 || snk.heady > HEIGHT || snk.heady < 0)
-        gameover = 0;
+        gameover=0;
     
-    if(!gameover){
-        Sleep(1000);
-        exit(0);
-    }
+    return gameover;
 }
 
 int main(){
     CONSOLE_SCREEN_BUFFER_INFO csbi;
 
-	/* Console window */
-	HANDLE wHnd = GetStdHandle(STD_OUTPUT_HANDLE); // https://cplusplus.com/forum/beginner/68765/
+	// Console window
+	HANDLE wHnd = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	SMALL_RECT windowSize = {0, 0,  WIDTH - 1, HEIGHT - 1};
-	SetConsoleWindowInfo(wHnd, TRUE, &windowSize); // https://csc.csudh.edu/mmccullough/asm/help/source/win32lib/setconsolewindowinfo.htm
+	SetConsoleWindowInfo(wHnd, TRUE, &windowSize);
 
 	COORD bufferSize = {WIDTH, HEIGHT};
-	SetConsoleScreenBufferSize(wHnd, bufferSize); // https://csc.csudh.edu/mmccullough/asm/help/source/win32lib/setconsolescreenbuffersize.htm
-//https://benryves.com/tutorials/winconsole/2
+	SetConsoleScreenBufferSize(wHnd, bufferSize);
 	CHAR_INFO consoleBuffer[WIDTH * HEIGHT];
 	COORD charBufSize = {WIDTH, HEIGHT};
 	COORD characterPos = {0, 0};
@@ -114,10 +114,14 @@ int main(){
     loading();
     setbcolor(0,consoleBuffer);
     init_snake(&snk);
-    for(;;){
-        //snake(consoleBuffer);
-        snake(consoleBuffer);
+    int go = 1;
+    while(go){
+        go = snake(consoleBuffer);
         WriteConsoleOutputA(wHnd, consoleBuffer, charBufSize, characterPos, &writeArea);
         Sleep(25);
+    }
+    for(;;){
+        gameOver_txt(consoleBuffer);
+        WriteConsoleOutputA(wHnd, consoleBuffer, charBufSize, characterPos, &writeArea);
     }
 }
