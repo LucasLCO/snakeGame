@@ -33,7 +33,7 @@ int snake(CHAR_INFO consoleBuffer[]){
     int gameover = 1;
     if (snk.size == 0){
         gen_food(&snk);
-        snk.size+=10;
+        snk.size+=2;
     }
     if(GetAsyncKeyState(VK_UP)) 
 		snk.direction = 0;
