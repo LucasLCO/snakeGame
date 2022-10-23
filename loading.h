@@ -200,7 +200,6 @@ void loading(void){//makes the loop
 	COORD characterPos = {0, 0};
 	SMALL_RECT writeArea = {0, 0, WIDTH - 1, HEIGHT - 1};
 	COORD bufferSize = {WIDTH, HEIGHT};
-	SetConsoleTitle(TEXT("LOADING..."));
 	setbcolor(0,consoleBuffer);
 	loading_txt(consoleBuffer);
 	circunference(RAD,consoleBuffer);
