@@ -17,12 +17,6 @@ struct snake{
     int foody;
 }snk;
 
-
-void aloca(int **pont, int *cont){
-    printf("je");
-}
-
-
 void gameover(CHAR_INFO consoleBuffer[]){
     gameOver_txt(consoleBuffer);
 }
@@ -118,6 +112,10 @@ void snake(CHAR_INFO consoleBuffer[], int *go, int *score){
 
     if(snk.headx >= WIDTH || snk.headx <= 0 || snk.heady >= HEIGHT || snk.heady <= 0)
         *go=0;
+    if(*go == 0){
+        gen_food(&snk);
+        snk.size=0;
+    }
 }
 
 
