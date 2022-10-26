@@ -13,7 +13,8 @@ typedef struct player{
 void file_write(char arq[], player *one);
 int read_last(char arq[]);
 void high_score(char arq[],player one);
-void idk(player **two,int i);
+void aloca(int **p,int tam);
+void arq_line(int line, char arq[]);
 
 int main(void){
     player one;
@@ -40,7 +41,7 @@ int main(void){
                 break;
             case 2:
                 high_score(arq, one);
-                printf("there is no high score yet :P");
+                //printf("there is no high score yet :P\n");
                 system("pause");
                 break;
             case 3:
@@ -56,7 +57,7 @@ void file_write(char arq[], player *one){
         fclose(score);
     }
     else
-        printf("There is @!#$");
+        printf("\nThere is @!#$\n");
 }
 //printf("\n%s Score: %i\n",two.name,two.score_value); 
 int read_last(char arq[]){
@@ -65,72 +66,52 @@ int read_last(char arq[]){
     if(score){
         while(!(feof(score))){
             if(!(fread(&two,sizeof(player),1,score)))
-                printf("\n%s Score: %i\n",two.name,two.score_value);    
+                printf("\n%s Score: %i\n\n\n",two.name,two.score_value);    
         }
         fclose(score);
     }
     else
-        printf("There is @!#$");
+        printf("\nThere is @!#$\n");
     return two.id;
 }
 
-void idk(player **two,int i){
-    if((*two=(player *)realloc(*two,i*sizeof(player)))==NULL)
-        printf("There is @!#$");
+void aloca(int **p,int tam){
+    if((*p=(int*)realloc(*p,tam*sizeof(int)))==NULL)
+        printf("\nThere is @!#$\n");
+}
+
+void arq_line(int line, char arq[]){
+    player two;
+    FILE* score = fopen(arq,"rb");
+    if(score){
+            fseek(score,line*sizeof(player),SEEK_CUR);
+            if((fread(&two,sizeof(player),1,score))){
+                printf("\n%s Score: %i\n\n\n",two.name,two.score_value);    
+            }
+        fclose(score);
+    }
+    else
+        printf("\nThere is @!#$\n");
 }
 
 void high_score(char arq[], player one){
     player two;
     FILE *score = fopen(arq,"rb");
+    int ids[(one.id+1)], *aux=NULL, highest_score=0, highest_score_id,i=0,j=0;
     if(score){
         while(!(feof(score))){
-            if((fread(&two,sizeof(player),1,score)))
-                printf("\n%s Score: %i\n",two.name,two.score_value);    
-        }
-        fclose(score);
-    }
-    else
-        printf("There is @!#$");
-    /*player two[one.id+1];
-    int high_ids[one.id], highest_score=0, i=0;
-    FILE *score = fopen(arq,"rb");
-    if(score){
-        while(!(feof(score))){
-            if((fread(&two[i],sizeof(player),1,score))){
-                if(highest_score==0){
-                    highest_score=two[i].score_value;
-                    high_ids[i]=two[i].id;
-                    printf("mis");
+            if((fread(&two,sizeof(player),1,score))){
+                if(two.score_value>highest_score){
+                    highest_score=two.score_value;
+                    ids[i]=two.id;
+                    i++;
                 }
-                else if(highest_score < two[i].score_value){
-                    highest_score=two[i].score_value;
-                    high_ids[i]=two[i].id;
-                    printf("mis");   
-                }
-                i++;
             }
-            
-        
-
-        }
+        }    
         fclose(score);
+        for(i=0;i<(one.id+1);i++)
+          arq_line(ids[i],arq);
     }
     else
         printf("There is @!#$");
-    player *two;
-    int high_ids[one.id], highest_score=0, i=0;
-
-    FILE *score = fopen(arq,"rb");
-    if(score){
-        while(!(feof(score))){
-            if(fread(&two,sizeof(player),1,score)){
-                printf("%i",two->id);
-                idk(&two,i+1);
-                i++;
-            }              
-        }
-        fclose(score);
-    }
-    else
-        printf("There is @!#$");*/
 }
