@@ -13,8 +13,9 @@ typedef struct player{
 void file_write(char arq[], player *one);
 int read_last(char arq[]);
 void high_score(char arq[],player one);
-void aloca(int **p,int tam);
+void aloca(player**p,int siz);
 void arq_line(int line, char arq[]);
+void sort(player *p, int size);
 
 int main(void){
     player one;
@@ -44,8 +45,6 @@ int main(void){
                 //printf("there is no high score yet :P\n");
                 system("pause");
                 break;
-            case 3:
-                return 0;
         }
     }while(op != 3);
 }
@@ -75,8 +74,8 @@ int read_last(char arq[]){
     return two.id;
 }
 
-void aloca(int **p,int tam){
-    if((*p=(int*)realloc(*p,tam*sizeof(int)))==NULL)
+void aloca(player **p,int siz){
+    if((*p=(player*)realloc(*p,siz*sizeof(player)))==NULL)
         printf("\nThere is @!#$\n");
 }
 
@@ -95,23 +94,36 @@ void arq_line(int line, char arq[]){
 }
 
 void high_score(char arq[], player one){
-    player two;
+    player *two = NULL;
     FILE *score = fopen(arq,"rb");
-    int ids[(one.id+1)], *aux=NULL, highest_score=0, highest_score_id,i=0,j=0;
+    int i=0,j=0;
     if(score){
         while(!(feof(score))){
-            if((fread(&two,sizeof(player),1,score))){
-                if(two.score_value>highest_score){
-                    highest_score=two.score_value;
-                    ids[i]=two.id;
-                    i++;
-                }
+                aloca(&two,i+1);
+            if((fread((two+i),sizeof(player),1,score))){
+                i++;
             }
-        }    
-        fclose(score);
-        for(i=0;i<(one.id+1);i++)
-          arq_line(ids[i],arq);
+        }
+        //for (int j = 0; j < i; j++) 
+        //printf("%d \n", *(scores+j));    
     }
     else
         printf("There is @!#$");
+    sort(two,i);
+    two+=i-1;
+    for(j=0;j<i;j++,two--)
+        printf("\n%s Score: %i\n\n\n",two->name,two->score_value);   
+    fclose(score);
+}
+
+void sort(player *p, int size){
+   for(int i = 0; i < size - 1; i++){
+      for(int j = 0; j < size - i - 1; j++){
+         if(p[j].score_value > p[j+1].score_value){
+            player temp = p[j];
+            p[j] = p[j+1];
+            p[j+1] = temp;
+         }
+      }
+   }
 }
